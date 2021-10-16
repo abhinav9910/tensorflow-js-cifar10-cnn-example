@@ -27,11 +27,11 @@ async function load () {
     const model = tf.sequential({layers: [
         tf.layers.conv2d({filters: 32, kernelSize: 3, activation: 'relu', inputShape: [32, 32, 3]}),
         tf.layers.maxPooling2d({poolSize: [2, 2]}),
-        tf.layers.conv2d({filters: 64, kernelSize: 3, activation: 'relu'}),
+        tf.layers.conv2d({filters: 64, kernelSize: 3, activation: 'relu', dropout: 0.5}),
         tf.layers.maxPooling2d({poolSize: [2, 2]}),
-        tf.layers.conv2d({filters: 64, kernelSize: 3, activation: 'relu'}),
+        tf.layers.conv2d({filters: 128, kernelSize: 3, activation: 'relu', dropout: 0.5}),
         tf.layers.flatten(),
-        tf.layers.dense({units: 64, activation: 'relu'}),
+        tf.layers.dense({units: 512, activation: 'relu'}),
         tf.layers.dense({units: 10, activation: 'softmax'})
     ]});
     tfvis.show.modelSummary({name: 'Model Architecture'}, model);
@@ -47,7 +47,7 @@ async function load () {
     const history = await model.fit(train_images.reshape([50000, 32, 32, 3]), train_labels, {
         validationData: [test_images.reshape([10000, 32, 32, 3]), test_labels], 
         batchSize: 128,
-        epochs: 10,
+        epochs: 20,
         callbacks: fitCallbacks
     });
 
